@@ -48,4 +48,9 @@ public class UserResource {
     }
     // This will give response code 201 with URI location http://localhost:8080/users/8
 
+    @DeleteMapping("/users/{id}")
+    public void deleteUser(@PathVariable int id) {
+        service.deleteById(id);
+    }
+
 }
