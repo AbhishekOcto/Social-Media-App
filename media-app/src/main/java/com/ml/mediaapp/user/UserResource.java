@@ -1,7 +1,10 @@
 package com.ml.mediaapp.user;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -26,8 +29,18 @@ public class UserResource {
     }
 
     @PostMapping("/users")
-    public void createUser(@RequestBody User user) {
-        service.save(user);
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+
+        User savedUser = service.save(user);
+        // /users/7 => users/{id} => user.getID
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(savedUser.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).build();
     }
+    // This will give response code 201 with URI location http://localhost:8080/users/8
 
 }
